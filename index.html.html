@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northstar | Precision Performance Marketing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #05070a;
+            --bg-card: #0f1117;
+            --accent: #3b82f6;
+            --accent-glow: rgba(59, 130, 246, 0.5);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        /* --- 基础重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* --- 背景光晕 --- */
+        .bg-glow {
+            position: fixed; top: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 50% -20%, #1e293b 0%, transparent 70%);
+            z-index: -1; pointer-events: none;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* --- 统一边距规范 --- */
+        section { padding: 8rem 0; }
+
+        /* --- 特殊修改：身份卡片板块间距优化 --- */
+        #partners {
+            padding-top: 2rem; /* 仅修改此处，大幅缩小与上方文字的间距 */
+        }
+
+        /* --- 导航栏 --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 0; border-bottom: 1px solid var(--border);
+            background: rgba(5, 7, 10, 0.8); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo { font-weight: 700; font-size: 1.25rem; letter-spacing: 1px; text-transform: uppercase; }
+        .logo span { color: var(--accent); }
+        .nav-links { display: flex; gap: 2rem; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: 0.3s; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* --- 按钮 --- */
+        .btn { padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-block; font-size: 0.9rem; border: none; }
+        .btn-primary { background: var(--accent); color: white; box-shadow: 0 0 15px var(--accent-glow); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--accent-glow); }
+        .btn-ghost { color: white; border: 1px solid var(--border); background: var(--glass); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+
+        /* --- 首屏 --- */
+        .hero { padding: 10rem 0 6rem; text-align: center; }
+        .badge { background: var(--glass); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 100px; font-size: 0.8rem; color: var(--accent); margin-bottom: 1.5rem; display: inline-block; letter-spacing: 1px; text-transform: uppercase; }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); line-height: 1.1; margin-bottom: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+        .hero p { color: var(--text-secondary); font-size: 1.2rem; max-width: 700px; margin: 0 auto 2.5rem; }
+        .hero-btns { display: flex; gap: 1rem; justify-content: center; }
+
+        /* --- 标题规范 --- */
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
+        /* --- 网格布局 --- */
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); padding: 2rem; border-radius: 12px; transition: 0.3s; height: 100%; }
+        .card:hover { border-color: var(--accent); background: linear-gradient(180deg, var(--bg-card) 0%, rgba(59,130,246,0.05) 100%); }
+        .card h3 { margin: 1rem 0; font-size: 1.25rem; }
+        .card p { color: var(--text-secondary); font-size: 0.95rem; }
+
+        /* --- 品牌滚动 (信任背书) --- */
+        .partnerships-section { background: rgba(255,255,255,0.01); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .marquee-wrapper { width: 100%; overflow: hidden; position: relative; padding: 2rem 0; }
+        .marquee-content { display: flex; width: max-content; animation: scroll 30s linear infinite; }
+        .marquee-item { margin: 0 3.5rem; color: var(--text-secondary); font-size: 1.4rem; font-weight: 700; opacity: 0.4; filter: grayscale(1); transition: 0.3s; }
+        .marquee-item:hover { opacity: 1; filter: grayscale(0); color: var(--accent); }
+        @keyframes scroll {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* --- 合作流程 --- */
+        .process-row { display: flex; justify-content: space-between; gap: 2rem; margin-top: 3rem; }
+        .step { flex: 1; position: relative; }
+        .step-number { font-size: 3.5rem; font-weight: 800; color: var(--glass); position: absolute; top: -25px; left: 0; z-index: -1; }
+
+        /* --- 双受众卡片 --- */
+        .dual-audience { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .audience-card { padding: 3.5rem; border-radius: 16px; border: 1px solid var(--border); }
+        .publisher-side { background: linear-gradient(135deg, #0f172a 0%, #020617 100%); }
+        .advertiser-side { background: var(--bg-card); border-left: 4px solid var(--accent); }
+        .audience-card h3 { font-size: 2rem; margin-bottom: 1rem; }
+        .audience-card ul { margin: 1.5rem 0; list-style: none; }
+        .audience-card li { margin-bottom: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px; }
+        .audience-card li::before { content: "→"; color: var(--accent); font-weight: bold; }
+
+        /* --- 底部 --- */
+        footer { border-top: 1px solid var(--border); padding: 5rem 0 2rem; background: #020408; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 4rem; margin-bottom: 4rem; }
+        .footer-logo { font-weight: 800; font-size: 1.5rem; margin-bottom: 1rem; }
+        .footer-link-head { font-weight: 600; margin-bottom: 1.2rem; color: white; }
+        .footer-links li { margin-bottom: 0.6rem; list-style: none; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: 0.3s; }
+        .footer-links a:hover { color: var(--accent); }
+        .copyright { padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; color: var(--text-secondary); font-size: 0.8rem; }
+
+        @media (max-width: 900px) {
+            .grid-3, .dual-audience, .process-row, .footer-grid { grid-template-columns: 1fr; }
+            .nav-links, .step-number { display: none; }
+            section { padding: 5rem 0; }
+            #partners { padding-top: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <!-- 导航 -->
+    <nav>
+        <div class="container nav-links">
+            <a href="#" class="logo">NORTH<span>STAR</span></a>
+            <div style="flex-grow: 1;"></div>
+            <a href="#traffic">Traffic</a>
+            <a href="#services">Verticals</a>
+            <a href="#process">Our Approach</a>
+            <a href="#partners">Partnerships</a>
+            <a href="mailto:info@northstar.com" class="btn btn-primary">Contact Us</a>
+        </div>
+    </nav>
+
+    <!-- 1. 首屏 -->
+    <section class="hero">
+        <div class="container">
+            <div class="badge">Next-Gen Performance Network</div>
+            <h1>Precision Marketing.<br><span style="color: var(--accent);">Measurable Results.</span></h1>
+            <p>Northstar is a boutique performance network bridging the gap between premium inventory and high-growth brands through data-driven distribution.</p>
+            <div class="hero-btns">
+                <a href="#advertisers" class="btn btn-primary">I want to Grow</a>
+                <a href="#publishers" class="btn btn-ghost">I have Traffic</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 流量来源 -->
+    <section id="traffic">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Supply Ecosystem</h2>
+                <p>We focus on audited traffic sources that deliver high-intent user engagement and sustainable performance.</p>
+            </div>
+            <div class="grid-3">
+                <div class="card">
+                    <div style="font-size: 2rem;">🔍</div>
+                    <h3>Premium Search</h3>
+                    <p>Capturing high-intent users through optimized SEM and keyword-targeted distribution.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2rem;">📱</div>
+                    <h3>In-App Inventory</h3>
+                    <p>Global reach through vetted mobile placements across utility and gaming environments.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2rem;">🌐</div>
+                    <h3>Programmatic Media</h3>
+                    <p>Real-time bidding across premium display exchanges with strict brand-safety filters.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2rem;">✍️</div>
+                    <h3>Content & Native</h3>
+                    <p>Contextually relevant placements that respect the user experience while driving ROI.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2rem;">📩</div>
+                    <h3>Performance Email</h3>
+                    <p>Direct-to-consumer outreach via compliant, double-opt-in publisher lists.</p>
+                </div>
+                <div class="card">
+                    <div style="font-size: 2rem;">⚡</div>
+                    <h3>Direct Publishers</h3>
+                    <p>Exclusive partnerships with media owners for first-look access to inventory.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. 行业领域 -->
+    <section id="services" style="background: rgba(255,255,255,0.02);">
+        <div class="container">
+            <div class="section-header">
+                <h2>Vertical Expertise</h2>
+                <p>Tailored user acquisition funnels designed for highly competitive digital industries.</p>
+            </div>
+            <div class="grid-3">
+                <div class="card" style="background: transparent;">
+                    <h3 style="border-left: 2px solid var(--accent); padding-left: 15px;">Mobile Apps</h3>
+                    <p>Global user acquisition for iOS & Android with deep focus on retention and post-install events.</p>
+                </div>
+                <div class="card" style="background: transparent;">
+                    <h3 style="border-left: 2px solid var(--accent); padding-left: 15px;">E-Commerce</h3>
+                    <p>Scaling D2C brands via performance-based CPA and high-return ROAS advertising models.</p>
+                </div>
+                <div class="card" style="background: transparent;">
+                    <h3 style="border-left: 2px solid var(--accent); padding-left: 15px;">Software/SaaS</h3>
+                    <p>Driving high-quality trials, installations, and subscriptions for premium desktop and web tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. 品牌背书 (Marquee) -->
+    <section id="partnerships" class="partnerships-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Trusted by Industry Leaders</h2>
+                <p>We collaborate with global advertisers and top-tier publishers to create sustainable growth and exceptional performance outcomes.</p>
+            </div>
+            <div class="marquee-wrapper">
+                <div class="marquee-content">
+                    <span class="marquee-item">GLOBAL ADTECH</span>
+                    <span class="marquee-item">NEXUS MEDIA</span>
+                    <span class="marquee-item">GROWTH LABS</span>
+                    <span class="marquee-item">PREMIUM NETWORK</span>
+                    <span class="marquee-item">ELITE BRANDS</span>
+                    <span class="marquee-item">PRIME TRAFFIC</span>
+                    <span class="marquee-item">GLOBAL ADTECH</span>
+                    <span class="marquee-item">NEXUS MEDIA</span>
+                    <span class="marquee-item">GROWTH LABS</span>
+                    <span class="marquee-item">PREMIUM NETWORK</span>
+                    <span class="marquee-item">ELITE BRANDS</span>
+                    <span class="marquee-item">PRIME TRAFFIC</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. 合作流程 (The Northstar Standard) -->
+    <section id="process">
+        <div class="container">
+            <div class="section-header">
+                <h2>The Northstar Standard</h2>
+                <p>Our operational framework ensures transparency and quality at every stage of cooperation.</p>
+            </div>
+            <div class="process-row">
+                <div class="step">
+                    <span class="step-number">01</span>
+                    <h4>Vetting</h4>
+                    <p>Every publisher and advertiser is manually reviewed to ensure absolute compliance and inventory quality.</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">02</span>
+                    <h4>Alignment</h4>
+                    <p>Matching campaigns with the most relevant traffic channels to maximize initial performance and ROI.</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">03</span>
+                    <h4>Optimization</h4>
+                    <p>Real-time data feedback loops allow us to trim low-performing sub-sources and optimize creative instantly.</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">04</span>
+                    <h4>Scaling</h4>
+                    <p>Once ROI benchmarks are proven, we leverage our entire network to increase volume sustainably.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. 身份转化 (重点修改间距的板块) -->
+    <section id="partners">
+        <div class="container">
+            <div class="dual-audience">
+                <div id="publishers" class="audience-card publisher-side">
+                    <h3>For Publishers</h3>
+                    <p>Monetize your global traffic with top-tier demand and consistent fill rates.</p>
+                    <ul>
+                        <li>Flexible Net-term reliable payouts</li>
+                        <li>Exclusive direct advertiser offers</li>
+                        <li>Real-time tracking and granular reporting</li>
+                        <li>Dedicated AM support for technical setup</li>
+                    </ul>
+                    <a href="mailto:publishers@northstar.com" class="btn btn-primary">Apply as Publisher</a>
+                </div>
+                <div id="advertisers" class="audience-card advertiser-side">
+                    <h3>For Advertisers</h3>
+                    <p>Acquire customers at a fixed cost and scale your user base globally with ease.</p>
+                    <ul>
+                        <li>AI-driven anti-fraud monitoring</li>
+                        <li>Performance-based models (CPA, CPI)</li>
+                        <li>Global reach across audited verticals</li>
+                        <li>Transparent source-level data reporting</li>
+                    </ul>
+                    <a href="mailto:advertisers@northstar.com" class="btn btn-ghost">Launch Campaign</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo">NORTH<span>STAR</span></div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Connecting quality traffic with global demand through transparent, data-driven marketing.</p>
+                </div>
+                <div>
+                    <div class="footer-link-head">Navigation</div>
+                    <ul class="footer-links">
+                        <li><a href="#traffic">Traffic Sources</a></li>
+                        <li><a href="#services">Verticals</a></li>
+                        <li><a href="#process">Our Process</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="footer-link-head">Contact Us</div>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@northstar.com">info@northstar.com</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2024 Northstar Performance Network. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
